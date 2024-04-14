@@ -10,43 +10,46 @@ function getAbsolutePath(value: string): any {
   return dirname(require.resolve(join(value, "package.json")));
 }
 const config: StorybookConfig = {
-  stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
+  stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)", "./tokens/**/*.stories.@(js|jsx|ts|tsx)"],
   addons: [
-    getAbsolutePath("@storybook/addon-onboarding"),
-    getAbsolutePath("@storybook/addon-links"),
-    getAbsolutePath("@storybook/addon-essentials"),
-    getAbsolutePath("@storybook/addon-themes"),
-    getAbsolutePath("@chromatic-com/storybook"),
-    getAbsolutePath("@storybook/addon-interactions"),
+    '@storybook/addon-essentials',
+    '@storybook/addon-links',
+    '@storybook/addon-themes',
+    '@chromatic-com/storybook',
+    // '@storybook/addon-interactions',
+    // getAbsolutePath("@storybook/addon-onboarding"),
+    // getAbsolutePath("@storybook/addon-links"),
+    // getAbsolutePath("@storybook/addon-essentials"),
+    // getAbsolutePath("@storybook/addon-themes"),
+    // getAbsolutePath("@chromatic-com/storybook"),
+    // getAbsolutePath("@storybook/addon-interactions"),
     {
       name: '@storybook/addon-styling-webpack',
       options: {
         rules: [
+          // Replaces existing CSS rules to support PostCSS
           {
             test: /\.css$/,
-            sideEffects: true,
             use: [
-              require.resolve('style-loader'),
+              'style-loader',
               {
-                loader: require.resolve('css-loader'),
-                options: {
-                  importLoaders: 1,
-                },
+                loader: 'css-loader',
+                options: { importLoaders: 1 }
               },
               {
-                loader: require.resolve('postcss-loader'),
-                options: {
-                  implementation: require.resolve('postcss'),
-                },
-              },
+                // Gets options from `postcss.config.js` in your project root
+                loader: 'postcss-loader',
+                options: { implementation: require.resolve('postcss') }
+              }
             ],
-          },
-        ],
-      },
-    },
+          }
+        ]
+      }
+    }
   ],
   framework: {
-    name: getAbsolutePath("@storybook/nextjs"),
+    // name: getAbsolutePath("@storybook/nextjs"),
+    name: '@storybook/nextjs',
     options: {},
   },
   docs: {
